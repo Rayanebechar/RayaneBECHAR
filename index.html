@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P.U.N.K - Concessionnaire Automobile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Reset et styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navbar */
+        header {
+            background-color: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(8px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .logo:hover {
+            color: #FFDA1F;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #FFDA1F;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: #FFDA1F;
+        }
+
+        .nav-links a.active {
+            color: #FFDA1F;
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .cart-icon {
+            color: white;
+            font-size: 1.3rem;
+            position: relative;
+            margin-left: 2rem;
+            transition: all 0.3s ease;
+            padding: 8px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .cart-icon:hover {
+            color: #FFDA1F;
+            background-color: rgba(255, 218, 31, 0.1);
+            transform: scale(1.1);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #FFDA1F;
+            color: #2F2E2E;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            z-index: 1001;
+        }
+
+        .hamburger .line {
+            height: 3px;
+            width: 100%;
+            background-color: white;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background-image: url('photo/e70c1baa757702ab0e700835312de831.jpg');
+            background-position: center;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #ffffff;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #FFDA1F;
+            color: #2F2E2E;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+/* Galerie */
+.gallery {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.gallery-title {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #2F2E2E;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.car-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.car-card:hover {
+    transform: translateY(-5px);
+}
+
+.car-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.car-card h3 {
+    font-size: 1.4rem;
+    margin: 15px 0 10px;
+}
+
+.car-card p {
+    font-size: 0.95rem;
+    padding: 0 15px 20px;
+    color: #666;
+}
+.gallery-grid a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.gallery-grid a:hover h3 {
+    color: #FFDA1F;
+}
+
+.gallery-grid a:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .nav-container {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                background-color: rgba(26, 26, 26, 0.98);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 100px 30px 30px;
+                gap: 1.5rem;
+                transition: right 0.3s ease;
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                right: 0;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+            }
+
+            .hamburger {
+                display: flex;
+                position: relative;
+                z-index: 1000;
+                order: 1;
+                margin-left: auto;
+            }
+
+            .cart-icon {
+                position: relative;
+                z-index: 1000;
+                margin-right: 15px;
+                order: 2;
+            }
+
+            .hero {
+                padding-top: 70px;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+                padding: 0 15px;
+            }
+
+            .hero p {
+                font-size: 1rem;
+                padding: 0 15px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Empêcher le scroll quand menu ouvert */
+        .no-scroll {
+            overflow: hidden;
+            height: 100%;
+            position: fixed;
+            width: 100%;
+        }
+.about-site {
+    padding: 60px 20px;
+    margin-top: 40px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.about-title {
+    font-size: 2.4rem;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #2F2E2E;
+}
+
+.about-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.about-text {
+    flex: 1 1 50%;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #444;
+}
+
+.about-images {
+    flex: 1 1 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.about-images img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    object-fit: cover;
+}
+.repair-section {
+    padding: 60px 0;
+    text-align: left;
+}
+
+.repair-title {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #2F2E2E;
+    text-align: center;
+}
+
+.repair-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.repair-text {
+    flex: 1 1 500px;
+    font-size: 1rem;
+    color: #444;
+    line-height: 1.8;
+}
+
+.repair-text ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 20px 0;
+}
+
+.repair-text ul li {
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.repair-text ul li i {
+    margin-right: 10px;
+    color: #FFDA1F;
+}
+
+.repair-image {
+    flex: 1 1 400px;
+    text-align: center;
+}
+
+.repair-image img {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+.site-footer {
+    background-color: #1a1a1a;
+    color: #fff;
+    padding: 60px 20px 20px;
+    margin-top: 60px;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.footer-branding,
+.footer-links,
+.footer-contact {
+    flex: 1 1 250px;
+}
+
+.footer-branding h3 {
+    font-size: 1.8rem;
+    color: #FFDA1F;
+    margin-bottom: 15px;
+}
+
+.footer-branding p {
+    font-size: 0.95rem;
+    color: #ccc;
+}
+
+.footer-links h4,
+.footer-contact h4 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #FFDA1F;
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 8px;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #ddd;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: #FFDA1F;
+}
+
+.footer-contact p {
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+    color: #ccc;
+}
+
+.footer-contact i {
+    margin-right: 8px;
+    color: #FFDA1F;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 0.9rem;
+    color: #888;
+    border-top: 1px solid #333;
+    padding-top: 15px;
+}
+/* Animation pour faire apparaître les images en fondu + zoom */
+@keyframes fadeInZoom {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Appliquer à toutes les images de la galerie */
+.car-card img {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 0.6s ease;
+  animation: fadeInZoom 1s forwards;
+}
+
+/* Délai en cascade (optionnel mais plus joli) */
+.gallery-grid a:nth-child(1) img {
+  animation-delay: 0.2s;
+}
+.gallery-grid a:nth-child(2) img {
+  animation-delay: 0.4s;
+}
+.gallery-grid a:nth-child(3) img {
+  animation-delay: 0.6s;
+}
+
+/* Effet au survol : zoom léger */
+.car-card:hover img {
+  transform: scale(1.05);
+}
+
+
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">P.U.N.K</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="galerie.html">Véhicules</a></li>
+                <li><a href="commande.html">Commande</a></li>
+                <li><a href="réparation.html">Réparation</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <a href="commande.html" class="cart-icon">
+                <span class="cart-count">0</span>
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+            <div class="hamburger">
+                <div class="line line1"></div>
+                <div class="line line2"></div>
+                <div class="line line3"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>DÉCOUVREZ VOTRE PROCHAIN VÉHICULE</h1>
+            <p>Le meilleur choix de véhicules neufs et d'occasion dans la région</p>
+            <a href="galerie.html" class="btn">Voir nos véhicules</a>
+        </div>
+    </section>
+    <!-- Galerie de voitures -->
+<!-- Galerie de voitures -->
+<section class="gallery container">
+    <h2 class="gallery-title">Nos modèles en vedette</h2>
+    <div class="gallery-grid">
+        <a href="" class="car-card">
+            <img src="photo/06c8a3b09d44f0044f43cd9c50eb784b.jpg" alt="Voiture 1">
+            <h3>Audi A5</h3>
+            <p>Performances et élégance réunies dans une berline sportive d'exception.</p>
+        </a>
+        <a href="" class="car-card">
+            <img src="photo/9bd00bef92f33c50e0f0dbfed420f181.jpg" alt="Voiture 2">
+            <h3>Porche 911</h3>
+            <p>Un coupé puissant au design raffiné pour une conduite exaltante.</p>
+        </a>
+        <a href="" class="car-card">
+            <img src="photo/2c1b365bdfbb4a88a2a6941eadfcfc9c.jpg" alt="Voiture 3">
+            <h3>BMW Série 3</h3>
+            <p>Un moteur V8 biturbo et une allure agressive pour les amateurs de sensations fortes.</p>
+        </a>
+    </div>
+</section>
+<section class="about-site container">
+    <h2 class="about-title">À propos de P.U.N.K</h2>
+    <div class="about-content">
+        <div class="about-text">
+            <p>
+                Chez <strong>P.U.N.K</strong>, nous partageons votre passion pour l'automobile. Notre mission est simple : vous accompagner dans la recherche de votre véhicule idéal, alliant qualité, performance et design.
+            </p>
+            <p>
+                Que vous rêviez d'une berline élégante, d'un SUV familial ou d'une sportive d'exception, notre sélection rigoureuse répond à toutes vos attentes. Nous mettons un point d’honneur à vous offrir des voitures fiables, à la pointe de la technologie.
+            </p>
+            <p>
+                Plus qu'un simple concessionnaire, nous sommes votre partenaire de confiance, proposant également des services personnalisés, de la commande sur-mesure à l’entretien, pour que votre expérience soit toujours simple, agréable et sécurisée.
+            </p>
+            <p>
+                Faites confiance à <strong>P.U.N.K</strong> — Ensemble, donnons vie à votre passion automobile.
+            </p>
+        </div>
+        <div class="about-images">
+            <img src="photo/685680906a8503f0e2d4910af462e26b.jpg" alt="Concessionnaire P.U.N.K">
+        </div>
+    </div>
+</section>
+<section class="repair-section container">
+    <h2 class="repair-title">Service de Réparation</h2>
+    <div class="repair-content">
+        <div class="repair-text">
+            <p>
+                Votre véhicule mérite le meilleur entretien. Chez <strong>P.U.N.K</strong>, notre atelier de réparation est équipé des dernières technologies pour diagnostiquer et réparer tous types de véhicules, qu’ils soient neufs ou d’occasion.
+            </p>
+            <p>
+                Notre équipe de techniciens certifiés prend en charge :
+            </p>
+            <ul>
+                <li><i class="fas fa-tools"></i> Entretien courant (vidange, freins, pneus...)</li>
+                <li><i class="fas fa-car-crash"></i> Réparations mécaniques et carrosserie</li>
+                <li><i class="fas fa-bolt"></i> Électronique embarquée & diagnostic</li>
+                <li><i class="fas fa-clipboard-check"></i> Contrôle technique & préparation</li>
+            </ul>
+            <p>
+                Nous vous garantissons un service rapide, transparent et de qualité, avec des pièces d’origine et des conseils personnalisés.
+            </p>
+        </div>
+        <div class="repair-image">
+<img src="photo/b88b13ddec049e89c3ab854ee69f3586.jpg" alt="Réparation auto P.U.N.K">
+        </div>
+    </div>
+</section>
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-container container">
+    <div class="footer-branding">
+      <h3>P.U.N.K</h3>
+      <p>Votre expert en vente et réparation automobile. Qualité, fiabilité, et passion à votre service.</p>
+    </div>
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="galerie.html">Véhicules</a></li>
+        <li><a href="commande.html">Commande</a></li>
+        <li><a href="réparation.html">Réparation</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p><i class="fas fa-map-marker-alt"></i> 123 Rue de l'Automobile, Paris</p>
+      <p><i class="fas fa-phone-alt"></i> +33 1 23 45 67 89</p>
+      <p><i class="fas fa-envelope"></i> contact@punkauto.fr</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 P.U.N.K. Tous droits réservés.</p>
+  </div>
+</footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const body = document.querySelector('body');
+
+            // Menu hamburger
+            hamburger.addEventListener('click', function() {
+                this.classList.toggle('toggle');
+                navLinks.classList.toggle('active');
+                body.classList.toggle('no-scroll');
+                
+                // Animation des lignes du hamburger
+                const lines = this.querySelectorAll('.line');
+                if (navLinks.classList.contains('active')) {
+                    lines[0].style.transform = 'translateY(8px) rotate(45deg)';
+                    lines[1].style.opacity = '0';
+                    lines[2].style.transform = 'translateY(-8px) rotate(-45deg)';
+                } else {
+                    lines[0].style.transform = 'none';
+                    lines[1].style.opacity = '1';
+                    lines[2].style.transform = 'none';
+                }
+            });
+
+            // Fermer le menu quand on clique sur un lien
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function() {
+                    hamburger.classList.remove('toggle');
+                    navLinks.classList.remove('active');
+                    body.classList.remove('no-scroll');
+                    
+                    // Réinitialiser l'animation du hamburger
+                    const lines = hamburger.querySelectorAll('.line');
+                    lines[0].style.transform = 'none';
+                    lines[1].style.opacity = '1';
+                    lines[2].style.transform = 'none';
+                });
+            });
+
+            // Animation de la navbar au scroll
+            window.addEventListener('scroll', function() {
+                const header = document.querySelector('header');
+                header.classList.toggle('scrolled', window.scrollY > 50);
+            });
+
+            // Ajouter la classe active au lien de la page courante
+            const currentPage = location.pathname.split('/').pop();
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+              const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartCount = document.querySelector('.cart-count');
+            if (cartCount) {
+                cartCount.textContent = cart.length;
+            }
+        });
+    </script>
+</body>
+</html>

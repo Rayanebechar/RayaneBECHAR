@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P.U.N.K - Galerie de Voitures</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Reset et styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navbar */
+        header {
+            background-color: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(8px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .logo:hover {
+            color: #FFDA1F;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #FFDA1F;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: #FFDA1F;
+        }
+
+        .nav-links a.active {
+            color: #FFDA1F;
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .cart-icon {
+            color: white;
+            font-size: 1.3rem;
+            position: relative;
+            margin-left: 2rem;
+            transition: all 0.3s ease;
+            padding: 8px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .cart-icon:hover {
+            color: #FFDA1F;
+            background-color: rgba(255, 218, 31, 0.1);
+            transform: scale(1.1);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #FFDA1F;
+            color: #2F2E2E;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            z-index: 1001;
+        }
+
+        .hamburger .line {
+            height: 3px;
+            width: 100%;
+            background-color: white;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Section pour la galerie */
+        .hero-gallery {
+            height: 60vh;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('photo/4e847a779b1ee7384b8dc996d21abe9e.jpg');
+            background-position: center;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #ffffff;
+            padding-top: 80px;
+            margin-bottom: 60px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-gallery h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .btn {
+            display: inline-block;
+            background: #FFDA1F;
+            color: #2F2E2E;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Styles pour la galerie */
+        .gallery-section {
+            padding: 40px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            color: #2F2E2E;
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 30px;
+            background-color: #e0e0e0;
+            color: #333;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background-color: #FFDA1F;
+            color: #2F2E2E;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .car-card {
+            background-color: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .car-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .car-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .car-info {
+            padding: 20px;
+        }
+
+        .car-title {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #2F2E2E;
+        }
+
+        .car-type {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .car-type.standard {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .car-type.electric {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .car-description {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .car-price {
+            font-weight: 700;
+            color: #2F2E2E;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 12px;
+            background-color: #FFDA1F;
+            border: none;
+            border-radius: 5px;
+            color: #2F2E2E;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-to-cart:hover {
+            background-color: #f1c40f;
+        }
+
+        /* Notification panier */
+        .cart-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #2F2E2E;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .cart-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .cart-notification a {
+            color: #FFDA1F;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2F2E2E;
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 60px;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .nav-container {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                background-color: rgba(26, 26, 26, 0.98);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 100px 30px 30px;
+                gap: 1.5rem;
+                transition: right 0.3s ease;
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                right: 0;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+            }
+
+            .hamburger {
+                display: flex;
+                position: relative;
+                z-index: 1000;
+                order: 1;
+                margin-left: auto;
+            }
+
+            .cart-icon {
+                position: relative;
+                z-index: 1000;
+                margin-right: 15px;
+                order: 2;
+            }
+
+            .hero-gallery {
+                padding-top: 70px;
+                height: 50vh;
+            }
+
+            .hero-gallery h1 {
+                font-size: 2.2rem;
+                padding: 0 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .hero-gallery h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .filter-buttons {
+                gap: 10px;
+            }
+
+            .filter-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Empêcher le scroll quand menu ouvert */
+        .no-scroll {
+            overflow: hidden;
+            height: 100%;
+            position: fixed;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">P.U.N.K</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="galerie.html" class="active">Véhicules</a></li>
+                <li><a href="commande.html">Commande</a></li>
+                <li><a href="réparation.html">Réparation</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <a href="commande.html" class="cart-icon">
+                <span class="cart-count">0</span>
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+            <div class="hamburger">
+                <div class="line line1"></div>
+                <div class="line line2"></div>
+                <div class="line line3"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section pour la galerie -->
+    <section class="hero-gallery">
+        <div class="hero-content">
+            <h1>NOTRE COLLECTION EXCEPTIONNELLE</h1>
+            <p>Découvrez notre sélection de véhicules neufs et d'occasion</p>
+        </div>
+    </section>
+
+    <!-- Galerie de voitures -->
+    <section class="gallery-section container">
+        <h2 class="section-title">Nos véhicules disponibles</h2>
+        
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">Toutes</button>
+            <button class="filter-btn" data-filter="standard">Standard</button>
+            <button class="filter-btn" data-filter="electric">Électrique</button>
+        </div>
+        
+        <div class="gallery-grid">
+            <!-- Voitures standard -->
+            <div class="car-card" data-category="standard">
+                <img src="photo/4e847a779b1ee7384b8dc996d21abe9e.jpg" alt="Peugeot 208" class="car-image">
+                <div class="car-info">
+                    <h3 class="car-title">Peugeot 208</h3>
+                    <span class="car-type standard">Standard</span>
+                    <p class="car-description">Compacte et économique, parfaite pour la ville.</p>
+                    <p class="car-price">À partir de 18 500 €</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
+            
+            <div class="car-card" data-category="standard">
+                <img src="photo/9bd00bef92f33c50e0f0dbfed420f181.jpg" alt="Porsche 911" class="car-image">
+                <div class="car-info">
+                    <h3 class="car-title">Porsche 911</h3>
+                    <span class="car-type standard">Standard</span>
+                    <p class="car-description">Un coupé puissant au design raffiné pour une conduite exaltante.</p>
+                    <p class="car-price">À partir de 110 000 €</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
+            
+            <div class="car-card" data-category="standard">
+                <img src="photo/69e1b171c3025a892f75c760dc33c1b9.jpg" alt="Mercedes Classe A" class="car-image">
+                <div class="car-info">
+                    <h3 class="car-title">Mercedes Classe A</h3>
+                    <span class="car-type standard">Standard</span>
+                    <p class="car-description">Luxe et technologie dans une compacte premium.</p>
+                    <p class="car-price">À partir de 32 500 €</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
+            
+            <div class="car-card" data-category="standard">
+                <img src="photo/0136ceeaa26a3c48c848566d3d3248f2.jpg" alt="Range Rover Evoque" class="car-image">
+                <div class="car-info">
+                    <h3 class="car-title">Range Rover Evoque</h3>
+                    <span class="car-type standard">Standard</span>
+                    <p class="car-description">SUV compact au design élégant et raffiné.</p>
+                    <p class="car-price">À partir de 45 000 €</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
+            
+            <div class="car-card" data-category="standard">
+                <img src="photo/dadeffa6c113e136a130ed1467e7bd2c.jpg" alt="Ford Mustang" class="car-image">
+                <div class="car-info">
+                    <h3 class="car-title">Ford Mustang</h3>
+                    <span class="car-type standard">Standard</span>
+                    <p class="car-description">L'icône américaine, puissance et style intemporel.</p>
+                    <p class="car-price">À partir de 52 000 €</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
+            
+            <div class="car-card" data-category="standard">
+                <img src="photo/14809667e1c08210cceb6d5854ceb4dd.jpg" alt="Renault Clio 4" class="car-image">
+                <div class="car-info">
+                    <h3 class="car-title">Renault Clio 4</h3>
+                    <span class="car-type standard">Standard</span>
+                    <p class="car-description">Polyvalente et confortable pour tous vos trajets.</p>
+                    <p class="car-price">À partir de 19 200 €</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
+            
+            <div class="car-card" data-category="standard">
+                <img src="photo/5731598ef5d41d2aa517a930f1b89f19.jpg" alt="Citroën C5 Aircross" class="car-image">
+                <div class="car-info">
+                    <h3 class="car-title">Citroën C5 Aircross</h3>
+                    <span class="car-type standard">Standard</span>
+                    <p class="car-description">SUV spacieux avec un grand confort de conduite.</p>
+                    <p class="car-price">À partir de 29 900 €</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
+            
+            <!-- Voitures électriques -->
+            <div class="car-card" data-category="electric">
+                <img src="photo/06c8a3b09d44f0044f43cd9c50eb784b.jpg" alt="Audi A5" class="car-image">
+                <div class="car-info">
+                    <h3 class="car-title">Audi A5</h3>
+                    <span class="car-type electric">Électrique</span>
+                    <p class="car-description">Performances et élégance réunies dans une berline sportive d'exception.</p>
+                    <p class="car-price">À partir de 52 000 €</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
+            
+            <div class="car-card" data-category="electric">
+                <img src="photo/bf01cf4f298c3284e3efcd33c2e251f5.jpg" alt="Tesla Model 3" class="car-image">
+                <div class="car-info">
+                    <h3 class="car-title">Tesla Model 3</h3>
+                    <span class="car-type electric">Électrique</span>
+                    <p class="car-description">Performante et autonome, l'électrique premium.</p>
+                    <p class="car-price">À partir de 42 990 €</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
+            
+            <div class="car-card" data-category="electric">
+                <img src="photo/2c1b365bdfbb4a88a2a6941eadfcfc9c.jpg" alt="BMW Série 3" class="car-image">
+                <div class="car-info">
+                    <h3 class="car-title">BMW Série 3</h3>
+                    <span class="car-type electric">Électrique</span>
+                    <p class="car-description">Un moteur V8 biturbo et une allure agressive pour les amateurs de sensations fortes.</p>
+                    <p class="car-price">À partir de 48 500 €</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
+            
+            <div class="car-card" data-category="electric">
+                <img src="photo/bb477810203fafec03d495b8db815a9c.jpg" alt="Renault ZOE" class="car-image">
+                <div class="car-info">
+                    <h3 class="car-title">Renault ZOE</h3>
+                    <span class="car-type electric">Électrique</span>
+                    <p class="car-description">La citadine électrique idéale pour le quotidien.</p>
+                    <p class="car-price">À partir de 32 000 €</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
+            
+            <div class="car-card" data-category="electric">
+                <img src="photo/6e4b9f764f781d818d962a75fbeca444.jpg" alt="Peugeot e-2008" class="car-image">
+                <div class="car-info">
+                    <h3 class="car-title">Peugeot e-2008</h3>
+                    <span class="car-type electric">Électrique</span>
+                    <p class="car-description">SUV compact 100% électrique et design.</p>
+                    <p class="car-price">À partir de 37 350 €</p>
+                    <button class="add-to-cart">Ajouter au panier</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2023 P.U.N.K Concessionnaire. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const body = document.querySelector('body');
+
+            // Menu hamburger
+            hamburger.addEventListener('click', function() {
+                this.classList.toggle('toggle');
+                navLinks.classList.toggle('active');
+                body.classList.toggle('no-scroll');
+                
+                // Animation des lignes du hamburger
+                const lines = this.querySelectorAll('.line');
+                if (navLinks.classList.contains('active')) {
+                    lines[0].style.transform = 'translateY(8px) rotate(45deg)';
+                    lines[1].style.opacity = '0';
+                    lines[2].style.transform = 'translateY(-8px) rotate(-45deg)';
+                } else {
+                    lines[0].style.transform = 'none';
+                    lines[1].style.opacity = '1';
+                    lines[2].style.transform = 'none';
+                }
+            });
+
+            // Fermer le menu quand on clique sur un lien
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function() {
+                    hamburger.classList.remove('toggle');
+                    navLinks.classList.remove('active');
+                    body.classList.remove('no-scroll');
+                    
+                    // Réinitialiser l'animation du hamburger
+                    const lines = hamburger.querySelectorAll('.line');
+                    lines[0].style.transform = 'none';
+                    lines[1].style.opacity = '1';
+                    lines[2].style.transform = 'none';
+                });
+            });
+
+            // Animation de la navbar au scroll
+            window.addEventListener('scroll', function() {
+                const header = document.querySelector('header');
+                header.classList.toggle('scrolled', window.scrollY > 50);
+            });
+
+            // Filtrage des voitures
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const carCards = document.querySelectorAll('.car-card');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Active le bouton cliqué
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    const filter = button.getAttribute('data-filter');
+                    
+                    carCards.forEach(card => {
+                        if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Gestion du panier
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartCountElement = document.querySelector('.cart-count');
+            
+            // Mettre à jour le compteur au chargement
+            updateCartCount();
+            
+            // Gestion du clic sur "Ajouter au panier"
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const carCard = this.closest('.car-card');
+                    const car = {
+                        id: Date.now(), // ID unique
+                        title: carCard.querySelector('.car-title').textContent,
+                        price: carCard.querySelector('.car-price').textContent,
+                        image: carCard.querySelector('.car-image').src,
+                        category: carCard.getAttribute('data-category')
+                    };
+                    
+                    cart.push(car);
+                    saveCart();
+                    updateCartCount();
+                    showAddedToCartMessage(car.title);
+                });
+            });
+            
+            function saveCart() {
+                localStorage.setItem('cart', JSON.stringify(cart));
+            }
+            
+            function updateCartCount() {
+                if (cartCountElement) {
+                    cartCountElement.textContent = cart.length;
+                }
+            }
+            
+            function showAddedToCartMessage(title) {
+                // Notification plus élégante qu'un alert()
+                const notification = document.createElement('div');
+                notification.className = 'cart-notification';
+                notification.innerHTML = `
+                    <p>${title} a été ajouté au panier</p>
+                    <a href="commande.html">Voir le panier</a>
+                `;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.classList.add('show');
+                }, 10);
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>

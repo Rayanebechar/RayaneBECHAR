@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commande - P.U.N.K Concessionnaire Automobile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Reset et styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navbar - Identique à la page d'accueil */
+        header {
+            background-color: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(8px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .logo:hover {
+            color: #FFDA1F;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #FFDA1F;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: #FFDA1F;
+        }
+
+        .nav-links a.active {
+            color: #FFDA1F;
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .cart-icon {
+            color: white;
+            font-size: 1.3rem;
+            position: relative;
+            margin-left: 2rem;
+            transition: all 0.3s ease;
+            padding: 8px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .cart-icon:hover {
+            color: #FFDA1F;
+            background-color: rgba(255, 218, 31, 0.1);
+            transform: scale(1.1);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #FFDA1F;
+            color: #2F2E2E;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            z-index: 1001;
+        }
+
+        .hamburger .line {
+            height: 3px;
+            width: 100%;
+            background-color: white;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        /* Styles pour la page de commande */
+        .order-container {
+            padding: 120px 20px 60px;
+            min-height: 100vh;
+        }
+
+        .order-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .order-header h1 {
+            font-size: 2.5rem;
+            color: #2F2E2E;
+            margin-bottom: 15px;
+        }
+
+        .order-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Contenu du panier */
+        #cart-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .empty-cart-icon {
+            font-size: 3rem;
+            color: #FFDA1F;
+            margin-bottom: 20px;
+        }
+
+        .empty-cart h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #2F2E2E;
+        }
+
+        .empty-cart p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .back-to-shop {
+            display: inline-block;
+            background: #FFDA1F;
+            color: #2F2E2E;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .back-to-shop:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Panier avec articles */
+        .cart-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .cart-items {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .cart-summary-sidebar {
+            width: 350px;
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .summary-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #2F2E2E;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-image {
+            width: 100px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-title {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: #2F2E2E;
+        }
+
+        .cart-item-price {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .remove-item {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .remove-item:hover {
+            color: #c0392b;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin: 25px 0;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2F2E2E;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #FFDA1F;
+            color: #2F2E2E;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .checkout-btn:hover {
+            background-color: #e6c51d;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Footer */
+        footer {
+            background: #2F2E2E;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 60px;
+        }
+
+        /* Responsive - Identique à la page d'accueil */
+        @media (max-width: 992px) {
+            .nav-container {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                background-color: rgba(26, 26, 26, 0.98);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 100px 30px 30px;
+                gap: 1.5rem;
+                transition: right 0.3s ease;
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                right: 0;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+            }
+
+            .hamburger {
+                display: flex;
+                position: relative;
+                z-index: 1000;
+                order: 1;
+                margin-left: auto;
+            }
+
+            .cart-icon {
+                position: relative;
+                z-index: 1000;
+                margin-right: 15px;
+                order: 2;
+            }
+
+            .order-container {
+                padding-top: 90px;
+            }
+
+            .cart-summary-sidebar {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .order-header h1 {
+                font-size: 2rem;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .cart-item-image {
+                width: 100%;
+                height: auto;
+                max-height: 150px;
+            }
+        }
+
+        /* Empêcher le scroll quand menu ouvert */
+        .no-scroll {
+            overflow: hidden;
+            height: 100%;
+            position: fixed;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header - Identique à la page d'accueil -->
+    <header>
+        <div class="container nav-container">
+            <a href="Accueil2.html" class="logo">P.U.N.K</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="galerie.html">Véhicules</a></li>
+                <li><a href="commande.html" class="active">Commande</a></li>
+                <li><a href="réparation.html">Réparation</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <a href="commande.html" class="cart-icon">
+                <span class="cart-count">0</span>
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+            <div class="hamburger">
+                <div class="line line1"></div>
+                <div class="line line2"></div>
+                <div class="line line3"></div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Contenu de la commande -->
+    <div class="order-container">
+        <div class="order-header">
+            <h1>Votre Commande</h1>
+            <p>Revoyez les véhicules sélectionnés avant de finaliser votre achat</p>
+        </div>
+        
+        <div id="cart-content">
+            <!-- Contenu dynamique du panier -->
+            <div class="empty-cart">
+                <div class="empty-cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <h2>Votre panier est vide</h2>
+                <p>Parcourez notre sélection de véhicules et trouvez celui qui vous convient</p>
+                <a href="galerie.html" class="back-to-shop">
+                    <i class="fas fa-arrow-left"></i> Voir nos véhicules
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2023 P.U.N.K Concessionnaire Automobile. Tous droits réservés.</p>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartContent = document.getElementById('cart-content');
+            const cartCount = document.querySelector('.cart-count');
+            
+            // Mettre à jour le compteur
+            if (cartCount) {
+                cartCount.textContent = cart.length;
+            }
+            
+            if (cart.length === 0) {
+                // Le panier est vide, on garde le message par défaut
+                return;
+            }
+            
+            // Calculer le total
+            const total = cart.reduce((sum, item) => {
+                const price = parseFloat(item.price.replace(/[^\d,]/g, '').replace(',', '.'));
+                return sum + price;
+            }, 0);
+            
+            // Afficher le contenu du panier
+            cartContent.innerHTML = `
+                <div class="cart-summary">
+                    <div class="cart-items">
+                        <h3 class="summary-title">Véhicules sélectionnés (${cart.length})</h3>
+                        ${cart.map(item => `
+                            <div class="cart-item">
+                                <img src="${item.image}" alt="${item.title}" class="cart-item-image">
+                                <div class="cart-item-details">
+                                    <h4 class="cart-item-title">${item.title}</h4>
+                                    <p class="cart-item-price">${item.price}</p>
+                                </div>
+                                <button class="remove-item" data-id="${item.id}">
+                                    <i class="fas fa-trash"></i> Supprimer
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="cart-summary-sidebar">
+                        <h3 class="summary-title">Récapitulatif</h3>
+                        <div class="summary-row">
+                            <span>Sous-total</span>
+                            <span>${total.toFixed(2)} €</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Livraison</span>
+                            <span>Gratuite</span>
+                        </div>
+                        <div class="summary-total">
+                            <span>Total</span>
+                            <span>${total.toFixed(2)} €</span>
+                        </div>
+                        <button class="checkout-btn">
+                            <i class="fas fa-credit-card"></i> Passer la commande
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Gestion de la suppression d'éléments
+            document.querySelectorAll('.remove-item').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    const newCart = cart.filter(item => item.id !== id);
+                    localStorage.setItem('cart', JSON.stringify(newCart));
+                    location.reload();
+                });
+            });
+            
+            // Gestion du bouton de commande
+            document.querySelector('.checkout-btn')?.addEventListener('click', function() {
+                // Animation de confirmation
+                this.innerHTML = '<i class="fas fa-check"></i> Commande validée !';
+                this.style.background = '#28a745';
+                
+                // Vider le panier après un délai
+                setTimeout(() => {
+                    localStorage.removeItem('cart');
+                    location.reload();
+                }, 1500);
+            });
+
+            // Gestion du menu hamburger - Identique à la page d'accueil
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const body = document.querySelector('body');
+
+            hamburger.addEventListener('click', function() {
+                this.classList.toggle('toggle');
+                navLinks.classList.toggle('active');
+                body.classList.toggle('no-scroll');
+                
+                // Animation des lignes du hamburger
+                const lines = this.querySelectorAll('.line');
+                if (navLinks.classList.contains('active')) {
+                    lines[0].style.transform = 'translateY(8px) rotate(45deg)';
+                    lines[1].style.opacity = '0';
+                    lines[2].style.transform = 'translateY(-8px) rotate(-45deg)';
+                } else {
+                    lines[0].style.transform = 'none';
+                    lines[1].style.opacity = '1';
+                    lines[2].style.transform = 'none';
+                }
+            });
+
+            // Fermer le menu quand on clique sur un lien
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function() {
+                    hamburger.classList.remove('toggle');
+                    navLinks.classList.remove('active');
+                    body.classList.remove('no-scroll');
+                    
+                    // Réinitialiser l'animation du hamburger
+                    const lines = hamburger.querySelectorAll('.line');
+                    lines[0].style.transform = 'none';
+                    lines[1].style.opacity = '1';
+                    lines[2].style.transform = 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
